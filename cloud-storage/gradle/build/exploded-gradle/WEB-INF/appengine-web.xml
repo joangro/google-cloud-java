@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+	<application>gradle-java-test</application>
+	<version>1.0</version>
+	<threadsafe>true</threadsafe>
+	<runtime>java8</runtime>
+	<url-stream-handler>urlfetch</url-stream-handler>
+	
+	<instance-class>F2</instance-class>
+
+	<automatic-scaling>
+		<target-cpu-utilization>0.65</target-cpu-utilization>
+		<min-instances>1</min-instances>
+		<max-instances>2</max-instances>
+	</automatic-scaling>
+</appengine-web-app>
