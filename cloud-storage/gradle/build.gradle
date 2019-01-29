@@ -5,6 +5,8 @@ buildscript {    // Configuration for building
   }
   dependencies {
     classpath 'com.google.cloud.tools:appengine-gradle-plugin:1.+'    // Latest 1.x.x release
+    classpath 'io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE'
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE") 
   }
 }
 
@@ -16,9 +18,22 @@ repositories {   // repositories for Jar's you access in your code
   jcenter()
 }
 
+configurations {
+    compile.exclude module: "spring-boot-starter-tomcat"
+}
+
 apply plugin: 'java'                              // standard Java tasks
 apply plugin: 'war'                               // standard Web Archive plugin
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
 apply plugin: 'com.google.cloud.tools.appengine'  // App Engine tasks
+
+jar {
+    baseName = '***thename***'
+    version = '1.0-SNAPSHOT'
+}
+
 
 dependencies {
   compile 'com.google.appengine:appengine-api-1.0-sdk:+'  // Latest App Engine Api's
@@ -30,17 +45,30 @@ dependencies {
   compile 'com.google.cloud:google-cloud-storage:+'
   compile 'com.google.auth:google-auth-library-oauth2-http:0.12.0'
 
+  compile ('org.springframework.boot:spring-boot-starter-web:+')
+  compile ('org.springframework.boot:spring-boot-starter-jetty:+')
+  compile("org.springframework.boot:spring-boot-starter-actuator:+")
+  compile 'org.springframework.boot:spring-boot-starter-data-jpa:+'
   //compile 'java.nio:nio:+'
 //  compile 'com.google.cloud:google-cloud:+'   // Latest Cloud API's http://googlecloudplatform.github.io/google-cloud-java
   testCompile 'junit:junit:4.12'
   testCompile 'com.google.truth:truth:0.33'
   testCompile 'org.mockito:mockito-all:1.10.19'
+  testCompile("org.springframework.boot:spring-boot-starter-test")
 
   testCompile 'com.google.appengine:appengine-testing:+'
   testCompile 'com.google.appengine:appengine-api-stubs:+'
   testCompile 'com.google.appengine:appengine-tools-sdk:+'
 }
 
+bootRun {
+    addResources = true
+    //ENABLE FOR DEBUGGING
+    //jvmArgs = ['-Xdebug', '-Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=y']
+}
+bootRepackage {
+    enabled = false
+}
 // Always run unit tests
 appengineDeploy.dependsOn test
 appengineStage.dependsOn test
@@ -71,3 +99,4 @@ version = "1.0-SNAPSHOT"       // Version in generated output
 
 sourceCompatibility = 1.8     // App Engine Flexible uses Java 8
 targetCompatibility = 1.8     // App Engine Flexible uses Java 8
+{'version': 1, 'bindings': [{'role': 'roles/appengineflex.serviceAgent', 'members': ['serviceAccount:service-336421167702@gae-api-prod.google.com.iam.gserviceaccount.com']}, {'role': 'roles/automl.viewer', 'members': ['serviceAccount:test-625@wave16-joan.iam.gserviceaccount.com']}, {'role': 'roles/bigquery.admin', 'members': ['serviceAccount:bigquery@wave16-joan.iam.gserviceaccount.com']}, {'role': 'roles/cloudbuild.builds.builder', 'members': ['serviceAccount:336421167702@cloudbuild.gserviceaccount.com']}, {'role': 'roles/cloudfunctions.serviceAgent', 'members': ['serviceAccount:service-336421167702@gcf-admin-robot.iam.gserviceaccount.com']}, {'role': 'roles/cloudscheduler.admin', 'members': ['user:grauj@google.com']}, {'role': 'roles/cloudsql.admin', 'members': ['serviceAccount:cloud-proxy-1@wave16-joan.iam.gserviceaccount.com', 'serviceAccount:cloud-proxy@wave16-joan.iam.gserviceaccount.com', 'serviceAccount:cloudsql@wave16-joan.iam.gserviceaccount.com', 'serviceAccount:docker-sqladmin@wave16-joan.iam.gserviceaccount.com', 'serviceAccount:sdfdsfdsf@wave16-joan.iam.gserviceaccount.com', 'serviceAccount:second-project-sa@joan-grau-2018.iam.gserviceaccount.com']}, {'role': 'roles/cloudsql.client', 'members': ['serviceAccount:cloudsql-proxy@wave16-joan.iam.gserviceaccount.com']}, {'role': 'roles/cloudsql.editor', 'members': ['serviceAccount:cloud-proxy-2@wave16-joan.iam.gserviceaccount.com']}, {'role': 'roles/composer.serviceAgent', 'members': ['serviceAccount:service-336421167702@cloudcomposer-accounts.iam.gserviceaccount.com']}, {'role': 'roles/compute.admin', 'members': ['user:sellbytel-jgrau@premium-cloud-support.com']}, {'role': 'roles/compute.imageUser', 'members': ['user:carlesantong@gmail.com']}, {'role': 'roles/compute.instanceAdmin.v1', 'members': ['serviceAccount:336421167702@cloudbuild.gserviceaccount.com', 'user:sellbytel-jgrau@premium-cloud-support.com']}, {'role': 'roles/compute.serviceAgent', 'members': ['serviceAccount:service-336421167702@compute-system.iam.gserviceaccount.com']}, {'role': 'roles/container.serviceAgent', 'members': ['serviceAccount:service-336421167702@container-engine-robot.iam.gserviceaccount.com']}, {'role': 'roles/dataflow.serviceAgent', 'members': ['serviceAccount:service-336421167702@dataflow-service-producer-prod.iam.gserviceaccount.com']}, {'role': 'roles/dataprep.serviceAgent', 'members': ['serviceAccount:service-336421167702@trifacta-gcloud-prod.iam.gserviceaccount.com']}, {'role': 'roles/datastore.importExportAdmin', 'members': ['serviceAccount:bigquery@wave16-joan.iam.gserviceaccount.com']}, {'role': 'roles/editor', 'members': ['serviceAccount:336421167702-compute@developer.gserviceaccount.com', 'serviceAccount:336421167702@cloudservices.gserviceaccount.com', 'serviceAccount:analytics-processing-dev@system.gserviceaccount.com', 'serviceAccount:edit21@wave16-joan.iam.gserviceaccount.com', 'serviceAccount:gitlab@wave16-joan.iam.gserviceaccount.com', 'serviceAccount:owna2-135@wave16-joan.iam.gserviceaccount.com', 'serviceAccount:service-336421167702@containerregistry.iam.gserviceaccount.com', 'serviceAccount:wave16-joan@appspot.gserviceaccount.com', 'user:joan.grau01@estudiant.upf.edu']}, {'role': 'roles/endpointsportal.serviceAgent', 'members': ['serviceAccount:service-336421167702@endpoints-portal.iam.gserviceaccount.com']}, {'role': 'roles/file.serviceAgent', 'members': ['serviceAccount:service-336421167702@cloud-filer.iam.gserviceaccount.com']}, {'role': 'roles/firebaserules.system', 'members': ['serviceAccount:service-336421167702@firebase-rules.iam.gserviceaccount.com']}, {'role': 'roles/ml.serviceAgent', 'members': ['serviceAccount:service-336421167702@cloud-ml.google.com.iam.gserviceaccount.com']}, {'role': 'roles/owner', 'members': ['serviceAccount:joan-842@wave16-joan.iam.gserviceaccount.com', 'serviceAccount:mysql-client-1@wave16-joan.iam.gserviceaccount.com', 'serviceAccount:owna-308@wave16-joan.iam.gserviceaccount.com', 'serviceAccount:owna-674@wave16-joan.iam.gserviceaccount.com', 'serviceAccount:test-account@wave16-joan.iam.gserviceaccount.com', 'serviceAccount:vision-api@wave16-joan.iam.gserviceaccount.com', 'user:grauj@google.com', 'user:rcobos@google.com']}, {'role': 'roles/redis.serviceAgent', 'members': ['serviceAccount:service-336421167702@cloud-redis.iam.gserviceaccount.com']}, {'role': 'roles/servicenetworking.serviceAgent', 'members': ['serviceAccount:service-336421167702@service-networking.iam.gserviceaccount.com']}, {'role': 'roles/sourcerepo.serviceAgent', 'members': ['serviceAccount:service-336421167702@sourcerepo-service-accounts.iam.gserviceaccount.com']}, {'role': 'roles/storage.admin', 'members': ['serviceAccount:bigquery@wave16-joan.iam.gserviceaccount.com', 'serviceAccount:mdb-bucket@wave16-joan.iam.gserviceaccount.com']}, {'role': 'roles/viewer', 'members': ['serviceAccount:security@haku-cloud-01.iam.gserviceaccount.com', 'user:betin@google.com']}, {'role': 'roles/bigquery.jobUser', 'members': ['jgraunoel@gmail.com', {...}]}], 'etag': 'BwWACHdIRsE='}

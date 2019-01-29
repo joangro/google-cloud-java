@@ -1,0 +1,92 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    ext {
+        springVersion = '4.3.12.RELEASE'
+        springBootVersion = '1.5.8.RELEASE'
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:+")
+        classpath 'io.spring.gradle:dependency-management-plugin:+'
+        classpath 'com.google.cloud.tools:appengine-gradle-plugin:1.+'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'com.google.cloud.tools.appengine'
+
+jar {
+    baseName = '***thename***'
+    version = '1.0-SNAPSHOT'
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+configurations {
+    providedRuntime
+    compile.exclude module: "spring-boot-starter-tomcat"
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+dependencies {
+    //providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+
+    compile 'com.google.appengine:appengine-api-1.0-sdk:+'
+
+    // tag::jetty[]
+    compile ('org.springframework.boot:spring-boot-starter-web:+') /*{
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+    }*/
+    compile ('org.springframework.boot:spring-boot-starter-jetty:+')
+    // end::jetty[]
+    // tag::actuator[]
+    compile("org.springframework.boot:spring-boot-starter-actuator:+")
+    // end::actuator[]
+
+    // JPA Data (We are going to use Repositories, Entities, Hibernate, etc...)
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa:+'
+    // Use MySQL Connector-J
+    compile 'mysql:mysql-connector-java:+'
+
+    compile 'com.google.code.gson:gson:2.8.2'
+
+    compile 'com.google.cloud:google-cloud-storage:+'
+
+    compile("javax.xml.bind:jaxb-api:2.1")
+    compile("javax.el:javax.el-api:2.2.4")
+
+    testCompile("junit:junit")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+}
+bootRun {
+    addResources = true
+
+    //ENABLE FOR DEBUGGING
+    //jvmArgs = ['-Xdebug', '-Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=y']
+}
+appengine {  // App Engine tasks configuration
+  deploy {   // deploy configuration
+    // it used to be like this: project = "GCLOUD_CONFIG"
+  }
+}/*
+bootRepackage {
+	mainClass = 'com.example.storage.MainStorage'
+}*/
+group = 'se.theId***'   // Generated output GroupId
+version = '1.0-SNAPSHOT'          // Version in generated output
+eclipse {
+    project.natures 'org.eclipse.buildship.core.gradleprojectnature'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.5'
+}
